@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html"
 	"strings"
+	"time"
 
 	jira "github.com/andygrunwald/go-jira"
 	"github.com/google/go-github/github"
@@ -52,6 +53,17 @@ func runWeelyReportCommandFunc(cmd *cobra.Command, args []string) {
 
 	var body bytes.Buffer
 
+	fmt.Println(sprints, lastSprint)
+	if lastSprint == nil {
+		now := time.Now()
+		start := time.Now().Add(-7 * 24 * time.Hour)
+		lastSprint = &jira.Sprint{
+			CompleteDate: &now,
+			EndDate:      &now,
+			StartDate:    &start,
+		}
+	}
+	fmt.Println(lastSprint.StartDate)
 	startDate := lastSprint.StartDate.Format(dayFormat)
 	endDate := lastSprint.EndDate.Format(dayFormat)
 

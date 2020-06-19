@@ -89,6 +89,7 @@ func (s *BoardService) GetAllBoards(opt *BoardListOptions) (*BoardsList, *Respon
 	}
 
 	boards := new(BoardsList)
+	fmt.Printf("%+v\n%+v\n", req, boards)
 	resp, err := s.client.Do(req, boards)
 	if err != nil {
 		jerr := NewJiraError(resp, err)

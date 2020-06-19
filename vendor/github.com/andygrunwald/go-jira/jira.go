@@ -5,9 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"reflect"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -264,6 +267,10 @@ func CheckResponse(r *http.Response) error {
 	if c := r.StatusCode; 200 <= c && c <= 299 {
 		return nil
 	}
+
+	debug.PrintStack()
+	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	log.Println(string(bodyBytes))
 
 	err := fmt.Errorf("Request failed. Please analyze the request body for more details. Status code: %d", r.StatusCode)
 	return err
